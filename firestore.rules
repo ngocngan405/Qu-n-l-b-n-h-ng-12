@@ -1,0 +1,14 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Replace the placeholder with the exact Google account email of the shop owner.
+    // Do not deploy these rules until the placeholder has been replaced and tested.
+    function isOwner() {
+      return request.auth != null && request.auth.token.email == 'OWNER_EMAIL_REPLACE_ME@example.com';
+    }
+    match /shops/{shopId}/data/{docId} {
+      allow read, write: if isOwner();
+    }
+    match /{document=**} { allow read, write: if false; }
+  }
+}
